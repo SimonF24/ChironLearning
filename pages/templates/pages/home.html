@@ -1,0 +1,115 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+        <!-- Masthead -->
+        <header class="masthead text-white text-center">
+          <div class="overlay"></div>
+          <div class="container">
+            <div class="row">
+              <div class="col-xl-9 mx-auto">
+                <h1 class="mb-4">Welcome to the Future<br>of Online Learning</h1>
+              </div>
+              <div class="col-12 mx-auto justify-content-center">
+                <h2 class="mb-4">Gain the skills you need to have an impact</h2>
+              </div>
+              <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
+                <form>
+                  <div class="form-row justify-content-center">
+                    <div class="col-12 col-md-3">
+                      <a class="btn btn-block btn-lg btn-primary" href="{% url 'main:register' %}">Sign up</a>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <!-- Icons Grid -->
+        <section class="features-icons bg-light text-center">
+          <div class="container">
+            <div class="row">
+              <div class="col-lg-4">
+                <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+                  <div class="features-icons-icon d-flex">
+                    <i class="fas fa-code m-auto text-primary"></i>
+                  </div>
+                  <h3 class="icon-title">Personalized Learning</h3>
+                  <p class="lead mb-0">Let our artifical intelligence system determine the resources that will 
+                                       optimize your learning.</p>
+                </div>
+              </div>
+              <div class="col-lg-4">
+                <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+                  <div class="features-icons-icon d-flex">
+                    <i class="far fa-comment m-auto text-primary"></i>
+                  </div>
+                  <h3 class="icon-title">Connect with Others</h3>
+                  <p class="lead mb-0">Our built in messaging system will help you connect with others 
+                                       learning the same topics.</p>
+                </div>
+              </div>
+              <div class="col-lg-4">
+                <div class="features-icons-item mx-auto mb-0 mb-lg-3">
+                  <div class="features-icons-icon d-flex">
+                    <i class="fas fa-dollar-sign m-auto text-primary"></i>
+                  </div>
+                  <h3 class="icon-title">Support Creators</h3>
+                  <p class="lead mb-0">Half of all money we bring in goes directly to our independent content creators.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Image Showcases -->
+        <section class="showcase">
+          <div class="container-fluid p-0">
+            <div class="row no-gutters">
+              <div class="col-lg-6 order-lg-2 showcase-img" id="showcase-1"></div>
+              <div class="col-lg-6 order-lg-1 my-auto showcase-text">
+                <h2>Intelligent Content Recommendations</h2>
+                <p class="lead mb-0">Our system uses artificial intelligence to recommend the content that will help you learn 
+                                     most effectively, leading to more light bulb moments.</p>
+              </div>
+            </div>
+            <div class="row no-gutters">
+              <div class="col-lg-6 showcase-img" id="showcase-2"></div>
+              <div class="col-lg-6 my-auto showcase-text">
+                <h2>Active Learning</h2>
+                <p class="lead mb-0">Learning doesn't happen in a vacuum, so we connect you with peers learning with you and help 
+                                      you help each other.</p>
+              </div>
+            </div>
+            <div class="row no-gutters">
+              <div class="col-lg-6 order-lg-2 showcase-img" id="showcase-3"></div>
+              <div class="col-lg-6 order-lg-1 my-auto showcase-text">
+                <h2>Invest in Yourself</h2>
+                <p class="lead mb-0">Get the knowledge you need to meet your goals, whether you're trying to land your 
+                                      first job or be the first person on Mars.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="call-to-action text-white text-center">
+          <div class="overlay"></div>
+          <div class="container">
+            <div class="row">
+              <div class="col-xl-9 mx-auto">
+                <h2 class="mb-4">Ready to get started? Sign up now.</h2>
+              </div>
+              <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
+                <form>
+                  <div class="form-row justify-content-center">
+                    <div class="col-12 col-md-3">
+                      <a class="btn btn-block btn-lg btn-primary" href="{% url 'pages:home' %}">Sign up</a>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </section>
+{% endblock %}

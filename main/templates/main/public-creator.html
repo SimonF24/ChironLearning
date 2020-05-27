@@ -1,0 +1,77 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+        {% load custom_tags %}
+
+        <!-- Header -->
+        <header class="jumbotron custom-header">
+            <div class="container-fluid">
+                <h1 class="display-3">{{ creator.username }}</h1>
+            </div>
+        </header>
+
+        <!-- Creator Uploads -->
+        <div class="container">
+            <h2>{{ creator.username }} Uploads</h2>
+            <div class="card-deck">
+                {% if creator_uploads %}
+                {% for upload in creator_uploads %}
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">{{ upload.title }}</h5>
+                    </div>
+                    <div class="text-center">
+                        <div class="card-body">
+                            <video class="custom-video" controls>
+                                <source src="{{ MEDIA_URL }}{{ upload.upload }}" type="video/mp4">
+                                Your current browser does not support HTML5 embedded videos, please update your browser.
+                            </video>
+                        </div>
+                        <form action="{% url 'main:rating' %}" method="POST" class="rating" id="ratingform">
+                            {% csrf_token %}
+
+                            <input type="radio" name="rating" value="5-stars" class="rating-input" id="id_rating_{{ '0'|add_5_mult_with:forloop.counter0 }}" required>
+                            <label for="id_rating_{{ '0'|add_5_mult_with:forloop.counter0 }}" class="rating-star"></label>
+                            
+                            <input type="radio" name="rating" value="4-stars" class="rating-input" id="id_rating_{{ '1'|add_5_mult_with:forloop.counter0 }}" required>
+                            <label for="id_rating_{{ '1'|add_5_mult_with:forloop.counter0 }}" class="rating-star"></label>
+                            
+                            <input type="radio" name="rating" value="3-stars" class="rating-input" id="id_rating_{{ '2'|add_5_mult_with:forloop.counter0 }}" required>
+                            <label for="id_rating_{{ '2'|add_5_mult_with:forloop.counter0 }}" class="rating-star"></label>
+                            
+                            <input type="radio" name="rating" value="2-stars" class="rating-input" id="id_rating_{{ '3'|add_5_mult_with:forloop.counter0 }}" required>
+                            <label for="id_rating_{{ '3'|add_5_mult_with:forloop.counter0 }}" class="rating-star"></label>
+                            
+                            <input type="radio" name="rating" value="1-star" class="rating-input" id="id_rating_{{ '4'|add_5_mult_with:forloop.counter0 }}" required>
+                            <label for="id_rating_{{ '4'|add_5_mult_with:forloop.counter0 }}" class="rating-star"></label>
+                            
+                            <input type="hidden" name="concept" value="{{ concept.name }}">
+                            <input type="hidden" name="topic" value="{{ concept.topic }}">
+                            <input type="hidden" name="subject" value="{{ concept.subject }}">
+                            <input type="hidden" name="resource" value="{{ resource.embed_link }}">
+                            <input type="hidden" name="number_of_comments" value="{{ number_of_comments }}">
+                            {% if sort_comments_by_votes %}
+                            <input type="hidden" name="sort_comments_by" value="V">
+                            {% else %}
+                            <input type="hidden" name="sort_comments_by" value="T">
+                            {% endif %}
+                        </form>
+                    </div>
+                </div>
+                {% cycle '' '' '</div><div class="card-deck">' %}
+                        {% comment %}
+                                The above line ensures that only 3 cards will be rendered per line
+                        {% endcomment %}
+                {% endfor %}
+                {% else %}
+                <div class="card">
+                        <div class="card-body">
+                        <h5 class="card-title">No Uploads</h5>
+                        <p class="card-text">This creator hasn't uploaded anything yet.</p>
+                        </div>
+                </div>
+                {% endif %}      
+            </div>
+        </div>
+
+{% endblock %}

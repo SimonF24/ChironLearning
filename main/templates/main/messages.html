@@ -1,0 +1,23 @@
+        <!-- Messages (if applicable) -->
+        {% if messages %}
+        {% for message in messages %}
+        <div class="text-center alert 
+                    {% if message.level == DEFAULT_MESSAGE_LEVELS.DEBUG %}
+                    alert-info
+                    {% elif message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+                    alert-info
+                    {% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                    alert-success
+                    {% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+                    alert-warning
+                    {% elif message.level == DEFAULT_MESSAGE_LEVELS.ERROR %} 
+                    alert-warning 
+                    {% endif %}
+                    alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+        {% endif %}

@@ -1,0 +1,121 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+        <!-- Header -->
+        <header class="jumbotron custom-header">
+            <div class="container-fluid">
+                <h1 class="display-3">Login</h1>
+            </div>
+        </header>
+
+        {% include 'main/messages.html' %}
+
+        <!-- Message shown on login required redirect -->
+        {% if request.GET.next %}
+            <div class="text-center alert alert-warning alert-dismissible fade show" role="alert">
+                You need to be logged in to view that page
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endif %}
+
+        <!-- Login/Register Form -->
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 offset-md-3">
+                    <div class="card">
+                        <div class="card-header bg-white text-center">
+                            <div class="row">
+                                <div class="col-6">	
+                                    <a href="{% url 'main:login' %}" {% if show_register_form_first %} id="show-form-second-link" {% else %} class="active" id="show-form-first-link" {% endif %}>Login</a>
+                                </div>
+                                <div class="col-6">	
+                                    <a href="{% url 'main:login' %}" {% if show_register_form_first %} id="show-form-first-link" class="active" {% else %} id="show-form-second-link" {% endif %}>Register</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xl-12">
+                                    <form action="{% url 'main:login' %}" method="post" {% if show_register_form_first %}  class="hidden" id="show-form-second" {% else %} id="show-form-first" {% endif %}>
+                                    {% csrf_token %}
+                                        <div class="form-group">
+                                            <h2>{{ LoginForm.email.label }}</h2>
+                                            {{ LoginForm.email }}
+                                        </div>
+                                        <div class="form-group">
+                                            <h2>{{ LoginForm.password.label }}</h2>
+                                            {{ LoginForm.password }}
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-6 offset-sm-3">
+                                                    <input type="hidden" name="next" value="{{ request.GET.next }}"/>
+                                                    <input type="submit" class="form-control btn btn-primary" value="Log In">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-xl-12">
+                                                    <div class="text-center">
+                                                        <a href="{% url 'main:password-reset' %}">Forgot Password?</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <form action="{% url 'main:register' %}" method="post" {% if show_register_form_first %} id="show-form-first" {% else %} class="hidden" id="show-form-second" {% endif %}>
+                                    {% csrf_token %}
+                                        <div class="form-group">
+                                            <h2>{{ RegisterForm.email.label }}</h2>
+                                            {{ RegisterForm.email }}
+                                        </div>
+                                        <div class="form-group">
+                                            <h2>{{ RegisterForm.username.label }}</h2>
+                                            {{ RegisterForm.username }}
+                                            <p>This will be publicly visible</p>
+                                        </div>
+                                        <div class="form-group">
+                                            <h2>{{ RegisterForm.set_password.label }}</h2>
+                                            {{ RegisterForm.set_password }}
+                                        </div>
+                                        <div class="form-group">
+                                            <h2>{{ RegisterForm.confirm_password.label }}</h2>
+                                            {{ RegisterForm.confirm_password }}
+                                        </div>
+                                        
+                                        <div>
+                                            <div hidden id="password-match">
+                                                <i class="fas fa-check-circle"></i><p class="password-match-text"> The passwords match</p>
+                                            </div>
+                                            <div hidden id="password-no-match">
+                                                <i class="fas fa-times-circle"></i><p class="password-match-text"> The passwords don't match</p>
+                                            </div>  
+                                        </div>
+                                        
+                                        <div class="form-group text-center">
+                                            <input type="checkbox" required>    I agree to the <a href="{% url 'pages:terms-of-use' %}">Terms of Use</a> and <a href="{% url 'pages:privacy-policy' %}">Privacy Policy</a></input>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-6 offset-sm-3">
+                                                    <input type="submit" class="form-control btn btn-primary" value="Register Now" disabled>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if email %}
+        <script>document.getElementById('id_email').value = "{{ email }}"</script>
+        {% endif %}
+{% endblock %}    

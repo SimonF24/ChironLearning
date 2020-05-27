@@ -1,0 +1,62 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+
+        <!-- Header -->
+        <header class="jumbotron custom-header">
+                <div class="container-fluid">
+                        <h1 class="display-3">Dashboard</h1>
+                </div>
+        </header>
+
+        <!-- Dashboard Message (if applicable) -->
+        {% if dashboard_message %}
+            <div class="text-center alert alert-primary alert-dismissible fade show" role="alert">
+                {{ dashboard_message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endif %}
+
+        <!-- Cards -->
+        <div class="container">
+                <div class="card-deck">
+                        {% if subjects %}
+                        {% for subject in subjects %}
+                        <a class="custom-card card text-center" href="{% url 'main:subject' subject=subject.name %}">
+                                <div class="card-body">
+                                        <h5 class="card-title">{{ subject.name }}</h5>
+                                        <p class="card-text">{{ subject.description }}</p>
+                                        <table class="card-topics">
+                                                <tr>
+                                                        {% for topic in topics %}
+                                                        {% if topic.subject == subject %}
+                                                        <td><a href="{% url 'main:topic' subject=subject.name topic=topic.name %}">{{ topic.name }}</a></td>
+                                                        {% cycle '' '' '</tr><tr>' %}
+                                                                {% comment %}
+                                                                        The above line ensures that only 3 topics will be shown per line
+                                                                {% endcomment %}
+                                                        {% endif %}
+                                                        {% endfor %}
+                                                </tr>
+                                        </table>
+                                </div>
+                        </a>
+                        {% cycle '' '' '</div><div class="card-deck">' %}
+                                {% comment %}
+                                        The above line ensures that only 3 cards will be rendered per line
+                                {% endcomment %}
+                        {% endfor %}
+                        {% endif %}
+                        <div class="card">
+                                <div class="card-body">
+                                <h5 class="card-title">More content coming soon</h5>
+                                <p class="card-text">We'll be adding more subjects in the coming weeks and months.</p>
+                                </div>
+                        </div>
+                                
+                </div>
+        </div>
+
+{% endblock %}

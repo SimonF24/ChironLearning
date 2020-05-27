@@ -1,0 +1,95 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+        {% load custom_tags %}
+
+        <!-- Header -->
+        <header class="jumbotron custom-header">
+            <div class="container-fluid">
+                <h1 class="display-3">Account</h1>
+            </div>
+        </header>
+
+        {% include 'main/messages.html' %}
+
+        <!-- Profile -->
+        <div class="container mb-4">
+            <div class="card text-center">
+                <div class="card-header">
+                    <h2>Your Profile</h2>
+                </div>
+                <div class="card-body">
+                    <p>Your username is {{ request.user.username }}</p>
+                    <p>Member since {{ request.user.date_joined|date }}</p>
+                    {% if request.user.is_creator %}
+                    <p><a href="{% url 'main:creator' %}">Creator Page</a></p>
+                    {% else %}
+                    <p><a href="{% url 'main:page-doesnt-exist-yet' %}">Become a Creator</a></p>
+                    {% endif %}
+                    <p><a href="{% url 'main:change-password' %}">Change your Password</a></p>
+                    <p><a href="{% url 'main:close-account' %}">Delete your Account</a></p>
+                    <p class="mb-0"><a href="{% url 'main:logout' %}">Logout</a></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- All Previously Rated Resources -->
+        <div class="container">
+            <h2>Your Rated Resources</h2>
+            {% if previous_resources %}
+            <div class="card-deck">
+                {% for resource, rating in previous_resources.items %}
+                <div class="card">
+                    <div class="card-header" id="heading{{ forloop.counter }}">
+                        <h3 class="mb-0 text-center">
+                        Rated Resource #{{ forloop.counter }}
+                        </h3>
+                    </div>
+                    <div id="collapsed{{ forloop.counter }}" class="text-center">
+                        <div class="card-body">
+                            <iframe width="560" height="315" src="{{ resource.embed_link }}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                            <p class="mb-0 mt-2"><a href="{{ resource.normal_link }}" target="_blank">Original Content Source</a></p>
+                        </div>
+                        <form action="{% url 'main:rating' %}" method="POST" class="rating">
+                            {% csrf_token %}
+                            
+                            <input type="radio" name="rating" value="5-stars" class="rating-input" id="id_rating_{{ '0'|add_5_mult_with:forloop.counter0 }}" required>
+                            <label for="id_rating_{{ '0'|add_5_mult_with:forloop.counter0 }}" class="rating-star"></label>
+                            
+                            <input type="radio" name="rating" value="4-stars" class="rating-input" id="id_rating_{{ '1'|add_5_mult_with:forloop.counter0 }}" required>
+                            <label for="id_rating_{{ '1'|add_5_mult_with:forloop.counter0 }}" class="rating-star"></label>
+                            
+                            <input type="radio" name="rating" value="3-stars" class="rating-input" id="id_rating_{{ '2'|add_5_mult_with:forloop.counter0 }}" required>
+                            <label for="id_rating_{{ '2'|add_5_mult_with:forloop.counter0 }}" class="rating-star"></label>
+                            
+                            <input type="radio" name="rating" value="2-stars" class="rating-input" id="id_rating_{{ '3'|add_5_mult_with:forloop.counter0 }}" required>
+                            <label for="id_rating_{{ '3'|add_5_mult_with:forloop.counter0 }}" class="rating-star"></label>
+                            
+                            <input type="radio" name="rating" value="1-star" class="rating-input" id="id_rating_{{ '4'|add_5_mult_with:forloop.counter0 }}" required>
+                            <label for="id_rating_{{ '4'|add_5_mult_with:forloop.counter0 }}" class="rating-star"></label>
+                            
+                            <input type="hidden" name="concept" value="{{ concept.name }}">
+                            <input type="hidden" name="topic" value="{{ concept.topic }}">
+                            <input type="hidden" name="subject" value="{{ concept.subject }}">
+                            <input type="hidden" name="resource" value="{{ resource.embed_link }}">
+                            <input type="hidden" name="number_of_comments" value="{{ number_of_comments }}">
+                            {% if sort_comments_by_votes %}
+                            <input type="hidden" name="sort_comments_by" value="V">
+                            {% else %}
+                            <input type="hidden" name="sort_comments_by" value="T">
+                            {% endif %}
+                        </form>
+                    </div>
+                </div>
+                {% cycle '' '' '</div><div class="card-deck">' %}
+                    {% comment %}
+                            The above line ensures that only 3 cards will be rendered per line
+                    {% endcomment %}
+                {% endfor %}
+            {% else %}
+                <p class="text-center mb-4 mt-4">You haven't rated any resources yet. Providing feedback on videos you watch helps us recommend more effective content!</p>
+            {% endif %}
+            </div>
+        </div>
+
+{% endblock %}

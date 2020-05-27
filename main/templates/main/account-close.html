@@ -1,0 +1,20 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+
+        <!-- Header -->
+        <header class="jumbotron custom-header">
+            <div class="container-fluid">
+                <h1 class="display-3">Change Password</h1>
+            </div>
+        </header>
+
+        <!-- Main Form -->
+        <form method="post" class="text-center">
+            {% csrf_token %}
+            <p>Are you sure you want to close your account?</p>
+            <button type="submit" class="btn btn-primary">Yes, close my account</button>
+            <a href="{% url 'main:account' %}" class="btn btn-primary">No, take me back to my account page</a>
+        </form>
+
+{% endblock %}

@@ -1,0 +1,163 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+        {% load custom_tags %}
+
+        <!-- Header -->
+        <header class="jumbotron custom-header">
+            <div class="container-fluid">
+                <h1 class="display-3">{{ concept.name }}</h1>
+            </div>
+        </header>
+
+        <!-- New Resources -->
+        <div class="accordion container" id="accordion">
+        <h2>Your Recommended Resources</h2>
+        {% if recommendations %}
+            {% for resource in recommendations %}
+            <div class="card">
+                <div class="card-header" id="heading{{ forloop.counter }}">
+                    <h3 class="mb-0">
+                    <button class="btn btn-link {% if not forloop.first %} collapsed {% endif %}" type="button" data-toggle="collapse" data-target="#collapse{{ forloop.counter }}" aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}" aria-controls="collapse{{ forloop.counter }}">
+                    Recommended Resource #{{ forloop.counter }}
+                    </button>
+                    </h3>
+                </div>
+                <div id="collapse{{ forloop.counter }}" class="text-center collapse {% if forloop.first %}show{% endif %}" aria-labelledby="heading{{ forloop.counter }}" data-parent="#accordion">
+                    <div class="card-body">
+                            <video class="custom-video" controls>
+                                <source src="{{ MEDIA_URL }}{{ resource.upload }}" type="video/mp4">
+                                Your current browser does not support HTML5 embedded videos, please update your browser.
+                            </video>
+                        <p class="mb-0 mt-2"><a href="{% url 'main:creator-public' resource.creator.pk %}">Creator Page</a></p>
+                    </div>
+                    <form action="{% url 'main:rating' %}" method="POST" class="rating" id="ratingform">
+                        {% csrf_token %}
+
+                        <input type="radio" name="rating" value="5-stars" class="rating-input" id="id_rating_{{ '0'|add_5_mult_with:forloop.counter0 }}" required>
+                        <label for="id_rating_{{ '0'|add_5_mult_with:forloop.counter0 }}" class="rating-star"></label>
+                        
+                        <input type="radio" name="rating" value="4-stars" class="rating-input" id="id_rating_{{ '1'|add_5_mult_with:forloop.counter0 }}" required>
+                        <label for="id_rating_{{ '1'|add_5_mult_with:forloop.counter0 }}" class="rating-star"></label>
+                        
+                        <input type="radio" name="rating" value="3-stars" class="rating-input" id="id_rating_{{ '2'|add_5_mult_with:forloop.counter0 }}" required>
+                        <label for="id_rating_{{ '2'|add_5_mult_with:forloop.counter0 }}" class="rating-star"></label>
+                        
+                        <input type="radio" name="rating" value="2-stars" class="rating-input" id="id_rating_{{ '3'|add_5_mult_with:forloop.counter0 }}" required>
+                        <label for="id_rating_{{ '3'|add_5_mult_with:forloop.counter0 }}" class="rating-star"></label>
+                        
+                        <input type="radio" name="rating" value="1-star" class="rating-input" id="id_rating_{{ '4'|add_5_mult_with:forloop.counter0 }}" required>
+                        <label for="id_rating_{{ '4'|add_5_mult_with:forloop.counter0 }}" class="rating-star"></label>
+                        
+                        <input type="hidden" name="concept" value="{{ concept.name }}">
+                        <input type="hidden" name="topic" value="{{ concept.topic }}">
+                        <input type="hidden" name="subject" value="{{ concept.subject }}">
+                        <input type="hidden" name="resource" value="{{ resource.embed_link }}">
+                        <input type="hidden" name="number_of_comments" value="{{ number_of_comments }}">
+                        {% if sort_comments_by_votes %}
+                        <input type="hidden" name="sort_comments_by" value="V">
+                        {% else %}
+                        <input type="hidden" name="sort_comments_by" value="T">
+                        {% endif %}
+                    </form>
+                </div>   
+            </div>
+            {% endfor %}
+        {% elif no_resources %}
+        <p class="text-center mb-4 mt-4">
+            We don't have any resources on this topic. Know someone that can help us out? Encourage them to 
+            become a creator and upload their content.
+        </p>
+        {% else %}
+        <p class="text-center mb-4 mt-4">You've already viewed all of the resources we have on this topic. Time to learn something new!</p>
+        {% endif %}
+        </div>
+
+        <!-- Previously Rated Resources -->
+        <div class="accordion container mt-2" id="accordion">
+            <h2>Your Previously Rated Resources</h2>
+            {% if previous_resources %}
+            {% for previous_resource, previous_rating in previous_resources.items %}
+            <div class="card">
+                <div class="card-header" id="heading{{ forloop.counter }}">
+                    <h3 class="mb-0">
+                    <button class="btn btn-link {% if not forloop.first %} collapsed {% endif %}" type="button" data-toggle="collapse" data-target="#collapsed{{ forloop.counter }}" aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}" aria-controls="collapsed{{ forloop.counter }}">
+                    Previously Rated Resource #{{ forloop.counter }}
+                    </button>
+                    </h3>
+                </div>
+                <div id="collapsed{{ forloop.counter }}" class="text-center collapse" aria-labelledby="heading{{ forloop.counter }}" data-parent="#accordion">
+                    <div class="card-body">
+                        <iframe width="560" height="315" src="{{ previous_resource.embed_link }}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                        <p class="mb-0 mt-2"><a href="{{ previous_resource.normal_link }}" target="_blank">Original Content Source</a></p>
+                    </div>
+                    <form action="{% url 'main:rating' %}" method="POST" class="rating">
+                        {% csrf_token %}
+                        
+                        <input type="radio" name="rating" value="5-stars" class="rating-input" id="id_previous_rating_{{ '0'|add_5_mult_with:forloop.counter0 }}" required>
+                        <label for="id_previous_rating_{{ '0'|add_5_mult_with:forloop.counter0 }}" class="rating-star"></label>
+                        
+                        <input type="radio" name="rating" value="4-stars" class="rating-input" id="id_previous_rating_{{ '1'|add_5_mult_with:forloop.counter0 }}" required>
+                        <label for="id_previous_rating_{{ '1'|add_5_mult_with:forloop.counter0 }}" class="rating-star"></label>
+                        
+                        <input type="radio" name="rating" value="3-stars" class="rating-input" id="id_previous_rating_{{ '2'|add_5_mult_with:forloop.counter0 }}" required>
+                        <label for="id_previous_rating_{{ '2'|add_5_mult_with:forloop.counter0 }}" class="rating-star"></label>
+                        
+                        <input type="radio" name="rating" value="2-stars" class="rating-input" id="id_previous_rating_{{ '3'|add_5_mult_with:forloop.counter0 }}" required>
+                        <label for="id_previous_rating_{{ '3'|add_5_mult_with:forloop.counter0 }}" class="rating-star"></label>
+                        
+                        <input type="radio" name="rating" value="1-star" class="rating-input" id="id_previous_rating_{{ '4'|add_5_mult_with:forloop.counter0 }}" required>
+                        <label for="id_previous_rating_{{ '4'|add_5_mult_with:forloop.counter0 }}" class="rating-star"></label>
+                        
+                        <input type="hidden" name="concept" value="{{ concept.name }}">
+                        <input type="hidden" name="topic" value="{{ concept.topic }}">
+                        <input type="hidden" name="subject" value="{{ concept.subject }}">
+                        <input type="hidden" name="resource" value="{{ previous_resource.embed_link }}">
+                        <input type="hidden" name="number_of_comments" value="{{ number_of_comments }}">
+                        {% if sort_comments_by_votes %}
+                        <input type="hidden" name="sort_comments_by" value="V">
+                        {% else %}
+                        <input type="hidden" name="sort_comments_by" value="T">
+                        {% endif %}
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <p class="text-center mb-4 mt-4">You haven't rated any resources on this concept yet. Providing feedback on videos you watch helps us recommend more effective content!</p>
+            {% endif %}
+        </div>
+
+        <!-- Comments -->  
+        {% load comments %}      
+        {% get_comment_count for concept as comment_count %}
+        <div class="container" id="comments">
+            <p>{{ comment_count }} comments have been posted about {{ concept.name }}</p>
+            <ul class="nav nav-tabs justify-content-end">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'main:concept' subject=subject.name topic=topic.name concept=concept.name number_of_comments=number_of_comments sort_comments_by='V' %}#comments">
+                        Votes
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'main:concept' subject=subject.name topic=topic.name concept=concept.name number_of_comments=number_of_comments sort_comments_by='T' %}#comments">
+                        Recent
+                    </a>
+                </li>
+            </ul>
+            {% render_comment_list for concept %}
+            {% get_comment_form for concept as form %}
+            <form action="{% comment_form_target %}" method="POST">
+                {% csrf_token %}
+                {{ form.comment }}
+                {{ form.honeypot }}
+                {{ form.content_type }}
+                {{ form.object_pk }}
+                {{ form.timestamp }}
+                {{ form.security_hash }}
+                <input type="hidden" name="next" value="{% url 'main:concept' subject=subject.name topic=topic.name concept=concept.name %}#footer" />
+                <input type="submit" value="Add comment" id="id_submit" class="btn btn-primary"/>
+            </form>
+        </div>
+
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+        <!-- Header -->
+        <header id="contact-header" class="jumbotron custom-header">
+            <div class="container-fluid">
+                <h1 class="display-3" id="about-title">Contact Us</h1>
+            </div>
+        </header>
+
+        <!-- Success Message -->
+        <div class="container-fluid text-center confirm-message">
+            <h2>Thank you for contacting us!</h2>
+            <a class="btn btn-primary btn-lg" href="{% url 'pages:home' %}">Return to the home page</a>
+            <a class="btn btn-primary btn-lg" href="{% url 'main:dashboard' %}">Take me to my dashboard</a>
+        </div>
+{% endblock %}

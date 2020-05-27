@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="A personalized online education experience">
+        <meta name="author" content="Simon Fraser">
+        <meta http-equiv="X-UA-Compatible" content="ie-edge">
+    
+        <title>Chiron Learning</title>
+        
+        <!-- Bootstrap core CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+        <!-- Font-Awesome -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    
+        <!-- Custom CSS -->
+        {% load static %}
+        <link href="{% static 'main/css/custom.css' %}" rel="stylesheet">
+        <!-- ConstrainedFileField -->
+        <script src="{% static 'constrainedfilefield/js/file_checker.js' %}"></script>
+
+    </head>
+    <body>
+        <!-- Navigation Bar -->
+        <nav class="navbar navbar-expand-md navbar-light fixed-top bg-light">
+            <a class="navbar-brand" href="{% url 'pages:home' %}">Chiron Learning</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'pages:about' %}">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'pages:contact' %}">Contact Us</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav justify-content-end">
+                    {% if not request.user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'main:login' %}">Sign In</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-primary" href="{% url 'main:register' %}">Sign Up</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'main:account' %}">Welcome {{ request.user.username }}</a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="{% url 'main:dashboard' %}">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-primary" href="{% url 'main:logout' %}">Sign Out</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
+
+        {% block content %}
+        {% endblock %}
+
+        <!-- Footer -->
+        <footer class="bg-light nav justify-content-center" id="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 h-100 text-center text-lg-left my-auto">
+                    <ul class="list-inline mb-2">
+                        <li class="list-inline-item">
+                            <a href="{% url 'pages:about' %}">About</a>
+                        </li>
+                        <li class="list-inline-item">&sdot;</li>
+                        <li class="list-inline-item">
+                            <a href="{% url 'pages:contact' %}">Contact</a>
+                        </li>
+                        <li class="list-inline-item">&sdot;</li>
+                        <li class="list-inline-item">
+                            <a href="{% url 'pages:terms-of-use' %}">Terms of Use</a>
+                        </li>
+                        <li class="list-inline-item">&sdot;</li>
+                        <li class="list-inline-item">
+                            <a href="{% url 'pages:privacy-policy' %}">Privacy Policy</a>
+                        </li>
+                    </ul>
+                    <p class="text-muted small mb-4 mb-lg-0">&copy; Chiron Learning LLC 2019</p>
+                    </div>
+                    <div class="col-lg-6 h-100 text-center text-lg-right my-auto">
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item mr-3">
+                        <a target="_blank" href="https://www.facebook.com/Chiron-Learning-LLC-306545493301239/">
+                            <i class="fab fa-facebook-f fa-2x fa-fw"></i>
+                        </a>
+                        </li>
+                        <li class="list-inline-item mr-3">
+                        <a target="_blank" href="https://twitter.com/ChironLearning">
+                            <i class="fab fa-twitter fa-2x fa-fw"></i>
+                        </a>
+                        </li>
+                        <li class="list-inline-item">
+                        <a target="_blank" href="https://www.instagram.com/chiron_learning/">
+                            <i class="fab fa-instagram fa-2x fa-fw"></i>
+                        </a>
+                        </li>
+                    </ul>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        {% if not creator_page %} {% comment %}creator page needs this before other JS{% endcomment %}
+        <!-- JQuery 3.3.1 Minified CDN -->
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+        <!-- Popper JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <!-- Bootstrap JS -->
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        {% endif %}
+
+        <!-- Custom JavaScript -->
+        <script src="{% static 'main/js/custom.js' %}"></script>
+
+        <!-- Django Session Security -->
+        {% include 'session_security/all.html' %}
+        
+        {% if previous_resources %}
+        <script>
+        {% for previous_resource, previous_rating in previous_resources.items %}
+        $(function() {
+            {% if previous_rating == 1 %}
+            $("div[id='collapsed{{ forloop.counter }}'] input[value='1-star']").prop('checked', true);
+            {% elif previous_rating == 2 %}
+            $("div[id='collapsed{{ forloop.counter }}'] input[value='2-stars']").prop('checked', true);
+            {% elif previous_rating == 3 %}
+            $("div[id='collapsed{{ forloop.counter }}'] input[value='3-stars']").prop('checked', true);
+            {% elif previous_rating == 4 %}
+            $("div[id='collapsed{{ forloop.counter }}'] input[value='4-stars']").prop('checked', true);
+            {% elif previous_rating == 5 %}
+            $("div[id='collapsed{{ forloop.counter }}'] input[value='5-stars']").prop('checked', true);
+            {% endif %}
+        });
+        {% endfor %}
+        </script>
+        {% endif %}
+    </body>
+</html>

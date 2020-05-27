@@ -1,0 +1,71 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+
+        <!-- Header -->
+        <header class="jumbotron custom-header">
+            <div class="container-fluid">
+                <h1 class="display-3">{{ topic.name }}</h1>
+            </div>
+        </header>
+
+        <!-- Cards -->
+        <div class="container">
+                <div class="card-deck">
+                        {% if concepts %}
+                        {% for concept in concepts %}
+                        <a class="custom-card card text-center" href="{% url 'main:concept' subject=subject.name topic=topic.name concept=concept.name %}">
+                                <div class="card-body">
+                                        <h5 class="card-title">{{ concept.name }}</h5>
+                                        <p class="card-text">{{ concept.description }}</p>            
+                                </div>
+                        </a>
+                        {% cycle '' '' '</div><div class="card-deck">' %}
+                                {% comment %}
+                                        The above line ensures that only 3 cards will be rendered per line
+                                {% endcomment %}
+                        {% endfor %}
+                        {% endif %}
+                        <div class="card">
+                                <div class="card-body">
+                                <h5 class="card-title">More content coming soon...</h5>
+                                <p class="card-text">We'll be adding more concepts in the coming weeks and months.</p>
+                                </div>
+                        </div>
+                                
+                </div>
+        </div>
+
+        <!-- Comments -->  
+        {% load comments %}      
+        {% get_comment_count for topic as comment_count %}
+        <div class="container" id="comments">
+                <p>{{ comment_count }} comments have been posted about {{ topic.name }}</p>
+                <ul class="nav nav-tabs justify-content-end">
+                        <li class="nav-item">
+                                <a class="nav-link" href="{% url 'main:topic' subject=subject.name topic=topic.name number_of_comments=number_of_comments sort_comments_by='V' %}#comments">
+                                        Votes
+                                </a>
+                        </li>
+                        <li class="nav-item">
+                                <a class="nav-link" href="{% url 'main:topic' subject=subject.name topic=topic.name number_of_comments=number_of_comments sort_comments_by='T' %}#comments">
+                                        Recent
+                                </a>
+                        </li>
+                </ul>
+                {% render_comment_list for topic %}
+                {% get_comment_form for topic as form %}
+                <form action="{% comment_form_target %}" method="POST">
+                        {% csrf_token %}
+                        {{ form.comment }}
+                        {{ form.honeypot }}
+                        {{ form.content_type }}
+                        {{ form.object_pk }}
+                        {{ form.timestamp }}
+                        {{ form.security_hash }}
+                        <input type="hidden" name="next" value="{% url 'main:topic' subject=subject.name topic=topic.name %}#footer" />
+                        <input type="submit" value="Add comment" id="id_submit" class="btn btn-primary"/>
+                </form>
+        </div>
+
+{% endblock %}

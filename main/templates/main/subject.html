@@ -1,0 +1,84 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+
+        <!-- Header -->
+        <header class="jumbotron custom-header">
+            <div class="container-fluid">
+                <h1 class="display-3">{{ subject.name }}</h1>
+            </div>
+        </header>
+
+        <!-- Cards -->
+        <div class="container">
+                <div class="card-deck">
+                        {% if topics %}
+                        {% for topic in topics %}
+                        <a class="custom-card card text-center" href="{% url 'main:topic' subject=subject.name topic=topic.name %}">
+                                <div class="card-body">
+                                        <h5 class="card-title">{{ topic.name }}</h5>
+                                        <p class="card-text">{{ topic.description }}</p>
+                                        <table class="card-topics">
+                                                <tr>
+                                                        {% for concept in concepts %}
+                                                        {% if concept.topic == topic %}
+                                                        <td><a href="{% url 'main:concept' subject=subject.name topic=topic.name concept=concept.name %}">{{ topic.name }}</a></td>
+                                                        {% cycle '' '' '</tr><tr>' %}
+                                                                {% comment %}
+                                                                        The above line ensures that only 3 topics will be shown per line
+                                                                {% endcomment %}
+                                                        {% endif %}
+                                                        {% endfor %}
+                                                </tr>
+                                        </table>
+                                </div>
+                        </a>
+                        {% cycle '' '' '</div><div class="card-deck">' %}
+                                {% comment %}
+                                        The above line ensures that only 3 cards will be rendered per line
+                                {% endcomment %}
+                        {% endfor %}
+                        {% endif %}
+                        <div class="card">
+                                <div class="card-body">
+                                <h5 class="card-title">More content coming soon...</h5>
+                                <p class="card-text">We'll be adding more topics in the coming weeks and months.</p>
+                                </div>
+                        </div>
+                                
+                </div>
+        </div>
+
+        <!-- Comments -->  
+        {% load comments %}      
+        {% get_comment_count for subject as comment_count %}
+        <div class="container" id="comments">
+                <p>{{ comment_count }} comments have been posted about {{ subject.name }}</p>
+                <ul class="nav nav-tabs justify-content-end">
+                        <li class="nav-item">
+                                <a class="nav-link" href="{% url 'main:subject' subject=subject number_of_comments=number_of_comments sort_comments_by='V' %}#comments">
+                                        Votes
+                                </a>
+                        </li>
+                        <li class="nav-item">
+                                <a class="nav-link" href="{% url 'main:subject' subject=subject number_of_comments=number_of_comments sort_comments_by='T' %}#comments">
+                                        Recent
+                                </a>
+                        </li>
+                </ul>
+                {% render_comment_list for subject %}
+                {% get_comment_form for subject as form %}
+                <form action="{% comment_form_target %}" method="POST">
+                        {% csrf_token %}
+                        {{ form.comment }}
+                        {{ form.honeypot }}
+                        {{ form.content_type }}
+                        {{ form.object_pk }}
+                        {{ form.timestamp }}
+                        {{ form.security_hash }}
+                        <input type="hidden" name="next" value="{% url 'main:subject' subject=subject.name %}#footer" />
+                        <input type="submit" value="Add comment" id="id_submit" class="btn btn-primary"/>
+                </form>
+        </div>
+
+{% endblock %}

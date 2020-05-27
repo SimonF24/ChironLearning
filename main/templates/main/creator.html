@@ -1,0 +1,117 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+
+        <!-- File Input Plugin CSS -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.0.1/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
+
+        <!-- Header -->
+        <header class="jumbotron custom-header">
+            <div class="container-fluid">
+                <h1 class="display-3">Creator</h1>
+            </div>
+        </header>
+
+        {% include 'main/messages.html' %}
+
+        <!-- Upload Form --> 
+        <div class="container">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h2>Upload Form</h2>
+                </div>
+                <div class="card-body">
+                    <form id='uploadform' class="text-center" action="{% url 'main:upload' %}" data-concepts-url="{% url 'main:load-concepts' %}"
+                          data-topics-url="{% url 'main:load-topics' %}" method='post' enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <h2 class="mb-0">{{ UploadForm.title.label }}</h2>
+                            <small>Each of your uploads must have a unique title</small>
+                            {{ UploadForm.title }}
+                            <h2 class="mt-2 mb-2">{{ UploadForm.upload.label }}</h2>
+                            {{ UploadForm.upload}}
+                            <h2 class="mt-2 mb-2">{{ UploadForm.subject.label }}</h2>
+                            {{ UploadForm.subject }}
+                            <h2 class="mt-2 mb-2">{{ UploadForm.topic.label }}</h2>
+                            {{ UploadForm.topic }}
+                            <h2 class="mt-2 mb-2">{{ UploadForm.concept.label }}</h2>
+                            {{ UploadForm.concept }}
+                            {{ UploadForm.creator }}
+                        </div>
+                        <div class="form-group">
+                            <button id="upload-submit" type="submit" class="btn btn-primary" disabled>Upload</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Your Uploads -->
+        <div class="container">
+            <h2>Your Uploads</h2>
+            <div class="card-deck">
+                {% if user_uploads %}
+                {% for upload in user_uploads %}
+                <div class="card text-center">
+                    <div class="card-header">
+                        <h5 class="card-title">{{ upload.title }}</h5>
+                    </div>
+                    <div class="card-body">
+                        <video class="custom-video" controls>
+                            <source src="{{ MEDIA_URL }}{{ upload.upload }}" type="video/mp4">
+                            Your current browser does not support HTML5 embedded videos, please update your browser.
+                        </video>
+                    </div>
+                </div>
+                {% cycle '' '' '</div><div class="card-deck">' %}
+                        {% comment %}
+                                The above line ensures that only 3 cards will be rendered per line
+                        {% endcomment %}
+                {% endfor %}
+                {% else %}
+                <div class="card">
+                        <div class="card-body">
+                        <h5 class="card-title">No Uploads</h5>
+                        <p class="card-text">You haven't uploaded anything. Your uploads will show up here after you have.</p>
+                        </div>
+                </div>
+                {% endif %}      
+            </div>
+        </div>
+
+        <!-- JQuery 3.3.1 Minified CDN -->
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+        <!-- Popper JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <!-- Bootstrap JS -->
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <!-- File Input Plugin JS -->
+        <!-- purify.min.js to purify HTML content in your preview for HTML files -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.0.1/js/plugins/purify.min.js" type="text/javascript"></script>
+        <!-- Main Fileinput Plugin file -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.0.1/js/fileinput.min.js"></script>
+        <!-- Font Awesome Theme -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.0.1/themes/fas/theme.js"></script>
+        <!-- Translation -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.0.1/js/locales/(lang).js"></script>
+
+        <script>
+            $('#id_upload').fileinput({
+            theme:'fas',
+            maxFilesNum:1,
+            maxFileSize:5000000, {% comment %}kB{% endcomment %}
+            browseOnZoneClick:true,
+            dropZoneClickTitle:'',
+            required:true,
+            allowedFileExtensions:['mp4'],
+            showPreview:true,
+            uploadUrl:"{% url 'main:upload' %}",
+            uploadExtraData:{csrfmiddlewaretoken:"{{ csrf_token }}"},
+            zoomIndicator:'',
+            });
+            $('#id_upload').on('fileuploaded', function(event) {
+                $('#id_upload').prop('required', false)
+                $('#upload-submit').prop('disabled', false)
+            });
+        </script>
+{% endblock %}

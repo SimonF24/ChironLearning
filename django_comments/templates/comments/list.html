@@ -1,0 +1,169 @@
+      {% load comments %}
+      <dl id="comments">
+        {% with formatted_number_of_comments=number_of_comments|stringformat:"s" %}
+        {% with slice_argument=":"|add:formatted_number_of_comments %}
+        {% for comment in comment_list|slice:slice_argument %}
+        {% if not comment.parent_comment %}
+        <div class="row comment-container">
+          <div class="col-sm text-center">
+          <form action="{% upvote_form_action_handler comment request.user %}" method="POST">
+            {% csrf_token %}
+            {% autoescape off %}{% upvote_handler comment request.user %}{% endautoescape %}
+            <input type="hidden" name="next"
+            {% if concept %}
+              {% if sort_comments_by_votes %}
+                value="{% url 'main:concept' subject=subject.name topic=topic.name concept=concept.name number_of_comments=number_of_comments sort_comments_by='V' %}#c{{ comment.id }}"
+              {% else %}
+                value="{% url 'main:concept' subject=subject.name topic=topic.name concept=concept.name number_of_comments=number_of_comments sort_comments_by='T' %}#c{{ comment.id }}"
+              {% endif %}
+            {% elif topic %}
+              {% if sort_comments_by_votes %}
+                value="{% url 'main:topic' subject=subject.name topic=topic.name number_of_comments=number_of_comments sort_comments_by='V' %}#c{{ comment.id }}"
+              {% else %}
+                value="{% url 'main:topic' subject=subject.name topic=topic.name number_of_comments=number_of_comments sort_comments_by='T' %}#c{{ comment.id }}"
+              {% endif %}
+            {% elif subject %}
+              {% if sort_comments_by_votes %}
+                value="{% url 'main:subject' subject=subject.name number_of_comments=number_of_comments sort_comments_by='V' %}#c{{ comment.id }}"
+              {% else %}
+              value="{% url 'main:subject' subject=subject.name number_of_comments=number_of_comments sort_comments_by='T' %}#c{{ comment.id }}"
+              {% endif %}
+            {% endif %}
+            />
+          </form>
+          {{ comment.votes }}
+          <form action="{% downvote_form_action_handler comment request.user %}" method="POST">
+            {% csrf_token %}
+            {% autoescape off %}{% downvote_handler comment request.user %}{% endautoescape %}
+            <input type="hidden" name="next"
+            {% if concept %}
+              {% if sort_comments_by_votes %}
+                value="{% url 'main:concept' subject=subject.name topic=topic.name concept=concept.name number_of_comments=number_of_comments sort_comments_by='V' %}#c{{ comment.id }}"
+              {% else %}
+                value="{% url 'main:concept' subject=subject.name topic=topic.name concept=concept.name number_of_comments=number_of_comments sort_comments_by='T' %}#c{{ comment.id }}"
+              {% endif %}
+            {% elif topic %}
+              {% if sort_comments_by_votes %}
+                value="{% url 'main:topic' subject=subject.name topic=topic.name number_of_comments=number_of_comments sort_comments_by='V' %}#c{{ comment.id }}"
+              {% else %}
+                value="{% url 'main:topic' subject=subject.name topic=topic.name number_of_comments=number_of_comments sort_comments_by='T' %}#c{{ comment.id }}"
+              {% endif %}
+            {% elif subject %}
+              {% if sort_comments_by_votes %}
+                value="{% url 'main:subject' subject=subject.name number_of_comments=number_of_comments sort_comments_by='V' %}#c{{ comment.id }}"
+              {% else %}
+              value="{% url 'main:subject' subject=subject.name number_of_comments=number_of_comments sort_comments_by='T' %}#c{{ comment.id }}"
+              {% endif %}
+            {% endif %}
+            />
+          </form>
+          </div>
+          <div class="col-sm comment">
+          <dt id="c{{ comment.id }}">
+            {{ comment.submit_date|date }} - {{ comment.name }}
+          </dt>
+          <dd>
+            <p>{{ comment.comment }}</p>
+          </dd>
+          </div>
+        </div>
+        <div class="offset-sm-1">
+            <div id="replies" class="hidden mb-2">
+            {% for reply in comment.replies_to.all %}
+              {{ reply.comment }} - <b>{{ reply.name }}</b> <small>{{ reply.submit_date|date }}</small>
+            {% endfor %}  
+            {% if concept %}
+            {% get_comment_form for concept as form %}
+            {% elif topic %}
+            {% get_comment_form for topic as form %}
+            {% elif subject %}
+            {% get_comment_form for subject as form %}
+            {% endif %}
+            </div>
+            {% if comment.replies_to.all %}
+            <button class="btn btn-primary mb-2 show-replies-message">Show {{ comment.replies_to.all|length }} repl{{ comment.replies_to.all|pluralize:"y,ies" }}</button>
+            {% endif %}
+            <form action="{% comment_form_target %}" class="input-group reply" method="POST">
+              {% csrf_token %}
+              {{ form.honeypot }}
+              {{ form.content_type }}
+              {{ form.object_pk }}
+              {{ form.timestamp }}
+              {{ form.security_hash }}
+              <input type="text" name="comment" class="form-control" required placeholder="Add reply" />
+              <input type="hidden" name="parent_comment_id" value="{{ comment.id }}" />
+              <input type="hidden" name="next" 
+              {% if concept %}
+                {% if sort_comments_by_votes %}
+                value="{% url 'main:concept' subject=subject.name topic=topic.name concept=concept.name number_of_comments=number_of_comments sort_comments_by='V' %}#c{{ comment.id }}"
+                {% else %}
+                value="{% url 'main:concept' subject=subject.name topic=topic.name concept=concept.name number_of_comments=number_of_comments sort_comments_by='T' %}#c{{ comment.id }}"
+                {% endif %}
+              {% elif topic %}
+                {% if sort_comments_by_votes %}
+                value="{% url 'main:topic' subject=subject.name topic=topic.name number_of_comments=number_of_comments sort_comments_by='V' %}#c{{ comment.id }}"
+                {% else %}
+                value="{% url 'main:topic' subject=subject.name topic=topic.name number_of_comments=number_of_comments sort_comments_by='T' %}#c{{ comment.id }}"
+                {% endif %}
+              {% elif subject %}
+                {% if sort_comments_by_votes %}
+                value="{% url 'main:subject' subject=subject.name number_of_comments=number_of_comments sort_comments_by='V' %}#c{{ comment.id }}"
+                {% else %}
+                value="{% url 'main:subject' subject=subject.name number_of_comments=number_of_comments sort_comments_by='T' %}#c{{ comment.id }}"
+                {% endif %}
+              {% endif %}
+              />
+              <div class="input-group-append">
+              <button type="submit" class="btn btn-primary">Add reply</button>
+              </div>
+            </form>
+          </div>
+        {% endif %}
+        {% endfor %}
+        {% endwith %}
+        {% endwith %}
+      </dl>
+      {% if number_of_comments < comment_count and comment_count > 10 %}
+      <a class="btn btn-primary mb-4"
+      {% if concept %}
+        {% if sort_comments_by_votes %}
+        href="{% url 'main:concept' subject=subject.name topic=topic.name concept=concept.name number_of_comments=number_of_comments|add:'10' sort_comments_by='V' %}#footer"
+        {% else %}
+        href="{% url 'main:concept' subject=subject.name topic=topic.name concept=concept.name number_of_comments=number_of_comments|add:'10' sort_comments_by='T' %}#footer"
+        {% endif %}
+      {% elif topic %}
+        {% if sort_comments_by_votes %}
+        href="{% url 'main:topic' subject=subject.name topic=topic.name number_of_comments=number_of_comments|add:'10' sort_comments_by='V' %}#footer"
+        {% else %}
+        href="{% url 'main:topic' subject=subject.name topic=topic.name number_of_comments=number_of_comments|add:'10' sort_comments_by='T' %}#footer"
+        {% endif %}
+      {% elif subject %}
+        {% if sort_comments_by_votes %}
+        href="{% url 'main:subject' subject=subject.name number_of_comments=number_of_comments|add:'10' sort_comments_by='V' %}#footer"
+        {% else %}
+        href="{% url 'main:subject' subject=subject.name number_of_comments=number_of_comments|add:'10' sort_comments_by='T' %}#footer"
+        {% endif %}
+      {% endif %}
+      >Load 10 More Comments</a>
+      <a class="btn btn-primary mb-4"
+      {% if concept %}
+        {% if sort_comments_by_votes %}
+        href="{% url 'main:concept' subject=subject.name topic=topic.name concept=concept.name number_of_comments=comment_count sort_comments_by='V' %}#comments"
+        {% else %}
+        href="{% url 'main:concept' subject=subject.name topic=topic.name concept=concept.name number_of_comments=comment_count sort_comments_by='T' %}#comments"
+        {% endif %}  
+      {% elif topic %}
+        {% if sort_comments_by_votes %}
+        href="{% url 'main:topic' subject=subject.name topic=topic.name number_of_comments=comment_count sort_comments_by='V' %}#comments"
+        {% else %}
+        href="{% url 'main:topic' subject=subject.name topic=topic.name number_of_comments=comment_count sort_comments_by='T' %}#comments"
+        {% endif %}
+      {% elif subject %}
+        {% if sort_comments_by_votes %}
+        href="{% url 'main:subject' subject=subject.name number_of_comments=comment_count sort_comments_by='V' %}#comments"
+        {% else %}
+        href="{% url 'main:subject' subject=subject.name number_of_comments=comment_count sort_comments_by='T' %}#comments"
+        {% endif %}
+      {% endif %}
+      >Load All Comments</a>
+      {% endif %}

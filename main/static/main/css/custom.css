@@ -1,0 +1,285 @@
+header.masthead {
+  height:75%;
+  position: relative;
+  background-color: #343a40;
+  background: url("../images/bg-masthead.jpg") no-repeat center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  padding-top: 8rem;
+  padding-bottom: 4rem;
+}
+
+header.masthead .overlay {
+  position: absolute;
+  background-color: #212529;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0.3;
+}
+
+header.masthead h1 {
+  font-size: 2rem;
+}
+
+@media (min-width: 768px) {
+  header.masthead {
+    padding-top: 8rem;
+    padding-bottom: 6rem;
+  }
+  header.masthead h1 {
+    font-size: 3rem;
+  }
+}
+
+.showcase .showcase-text {
+  padding: 3rem;
+}
+
+.showcase .showcase-img {
+  min-height: 25rem;
+  background-size: cover;
+  background-position: center;
+}
+
+@media (min-width: 768px) {
+  .showcase .showcase-text {
+    padding: 7rem;
+  }
+}
+
+.features-icons {
+  padding-top: 1rem;
+  padding-bottom: 4rem;
+}
+
+.features-icons .features-icons-item {
+  max-width: 20rem;
+}
+
+.features-icons .features-icons-item .features-icons-icon {
+  height: 7rem;
+}
+
+.features-icons .features-icons-item .features-icons-icon i {
+  font-size: 5rem;
+}
+
+.testimonials {
+  padding-top: 7rem;
+  padding-bottom: 7rem;
+}
+
+.testimonials .testimonial-item {
+  max-width: 18rem;
+}
+
+.testimonials .testimonial-item img {
+  max-width: 12rem;
+  box-shadow: 0px 5px 5px 0px #adb5bd;
+}
+
+.call-to-action {
+  position: relative;
+  background-color: #343a40;
+  background: url("../images/bg-masthead.jpg") no-repeat center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+  margin-bottom:-1.25rem;
+}
+
+.call-to-action .overlay {
+  position: absolute;
+  background-color: #212529;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0.3;
+}
+
+footer {
+  padding-top: 2rem;
+  padding-bottom: 4rem;
+  position:absolute;
+  bottom:-1.25rem;
+  width:100%;
+  height:10rem;
+}
+
+#showcase-1 {
+  background-image: url("../images/lightbulb-on-blackboard.jpg")
+}
+
+#showcase-2 {
+  background-image: url("../images/code-screen.jpg")
+}
+
+#showcase-3 {
+  background-image: url("../images/earth.jpg")
+}
+
+.nav-link {
+  color:black !important;
+}
+
+#subheading {
+  font-size:2rem;
+}
+
+.custom-header {
+  margin-top:2rem;
+  background: url("../images/bg-masthead.jpg") no-repeat center;
+  background-size: cover;
+  color:white;
+}
+
+#about-header {
+  margin-bottom:1rem;
+}
+
+#about-title {
+  color:white;
+}
+
+#contact-header, .confirm-message, .card-deck {
+  margin-bottom:2rem;
+}
+
+#sign-up {
+  color:rgb(200,200,200);
+}
+
+#sign-up:hover {
+  color:rgb(300,300,300);
+}
+
+#register-form {
+  display:none;
+}
+
+.active {
+  font-size:1.2rem;
+}
+
+#show-form-first-link:hover, #show-form-second-link:hover {
+  text-decoration: none !important;
+}
+
+.hidden {
+  display:none;
+}
+
+h2 {
+  font-size:1.25rem;
+}
+
+h3 {
+  font-size:1.1rem;
+}
+
+html {
+  position:relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 10rem;
+}
+
+.card-topics {
+  width:100%;
+}
+
+#id_honeypot {
+  display:none;
+}
+
+#id_submit {
+  margin-top:1rem;
+}
+
+a.custom-card, a.custom-card:hover {
+  color:inherit;
+  text-decoration: none;
+}
+
+.custom-card:hover {
+  background-color:rgb(247,247,247);
+}
+
+.comment-container {
+  display:table;
+}
+
+.comment {
+  display:table-cell;
+  vertical-align: middle;
+}
+
+.reply {
+  width: 75%;
+}
+
+.rating {
+  overflow: hidden;
+  display: inline-block;
+}
+
+.rating-input {
+  float: right;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  margin: 0 0 0 -16px;
+  opacity: 0;
+}
+
+.rating:hover .rating-star:hover,
+.rating:hover .rating-star:hover ~ .rating-star,
+.rating-input:checked ~ .rating-star {
+  position:relative;
+  background-position: 0 0;
+}
+
+.rating-star,
+.rating:hover .rating-star {
+  position: relative; 
+  float: right;
+  display: block;
+  width: 16px;
+  height: 16px;
+  background: url('/static/main/images/star.png') 0 -16px;
+}
+
+#password-match {
+  color:green;
+}
+
+#password-no-match {
+  color:red;
+}
+
+.password-match-text {
+  display: inline;
+}
+
+.nav-name {
+  margin-bottom:0rem;
+}
+
+.icon-title {
+  font-size:1.25rem;
+}
+
+.custom-video {
+  height:100%;
+  width:100%
+}

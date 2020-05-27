@@ -1,0 +1,19 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+
+        <!-- Header -->
+        <header class="jumbotron custom-header">
+            <div class="container-fluid">
+                <h1 class="display-3">Account Deleted</h1>
+            </div>
+        </header>
+
+        <!-- Confirmation Message -->
+        <div class="container-fluid text-center confirm-message">
+            <h2>Your account was successfully deleted</h2>
+                <a class="btn btn-primary btn-lg" href="{% url 'pages:home' %}">Take me to the home page</a>
+                <a class="btn btn-primary btn-lg" href="{% url 'main:login' %}">Take me to the login page</a>
+        </div>
+
+{% endblock %}
