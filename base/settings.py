@@ -26,7 +26,7 @@ DEBUG = True
 
 LOCAL_DATABASE = True
 
-ALLOWED_HOSTS = ['localhost', 'Production0.us-west-2.elasticbeanstalk.com', 'www.chironlearning.com']
+ALLOWED_HOSTS = ['localhost', 'www.chironlearning.com']
 
 # Application definitions
 
